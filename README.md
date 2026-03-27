@@ -41,8 +41,8 @@ These insights can be used by:
 ---
 
 ## 📂 Dataset
-- `sales` — transactional data (**~1M rows**)
-- `stores` — store metadata (country, etc.)
+- `sales_10k` — transactional data (**~1M rows**)
+- `stores_10k` — store metadata (country, etc.)
 
 ### Key fields:
 - `customer_id`
