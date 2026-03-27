@@ -1,6 +1,6 @@
 -- =========================================
 -- SQL Pipeline: Cohort + Retention + Revenue
--- Данные: sales (~1M rows) + stores
+-- Data: sales (~1M rows) + stores
 -- =========================================
 
 -- Indexes for acceleration
