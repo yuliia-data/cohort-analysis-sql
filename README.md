@@ -108,8 +108,8 @@ Final dataset transformed into cohort matrix:
 ---
 
 ## 📸 Example Pivot Table
-
-![Cohort Pivot](images/pivot_table.png)
+*Screenshot of cohort pivot table generated in DBeaver*
+![Cohort Pivot](pivot_table.png)
 
 ---
 
