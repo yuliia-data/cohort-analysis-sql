@@ -1,167 +1,158 @@
-# 📊 Cohort Analysis & Product Metrics (SQL Project)
+# 📊 SQL Cohort Analysis Pipeline (1M+ rows)
 
-## 🔍 Overview
+## 🚀 Project Overview
+This project demonstrates a **production-style SQL analytics pipeline** built on large-scale e-commerce data (~1M rows).
 
-This project demonstrates an end-to-end SQL pipeline for cohort analysis using e-commerce data (~10k orders).  
+The goal is to transform raw transactional data into **actionable business insights** through cohort analysis.
 
-The goal is to analyze user behavior over time and calculate key product metrics such as retention, LTV, ARPU, and churn.
+The pipeline is designed to mimic a real-world analytics workflow used in product and marketing teams.
 
-The pipeline is designed to simulate a real-world analytics workflow, including data cleaning, cohort creation, metric calculation, and BI-ready output.
+The pipeline calculates key product and marketing metrics:
+- Retention Rate
+- Lifetime Value (LTV)
+- ARPU (Average Revenue Per User)
+- Churn Rate
+
+The final output is a **BI-ready cohort table (M0–M3 format)** suitable for dashboards in Power BI or Tableau.
 
 ---
 
-## 🧰 Tech Stack
+## 💼 Business Value
+This analysis helps answer critical business questions:
 
-- PostgreSQL
+- How well do we retain users after their first purchase?
+- Which cohorts generate the highest revenue over time?
+- How quickly do users churn?
+- Are there differences in performance across countries?
+
+These insights can be used by:
+- Product teams → improve retention
+- Marketing teams → evaluate acquisition quality
+- Finance teams → forecast revenue (LTV)
+
+---
+
+## ⚙️ Tech Stack
+- **PostgreSQL**
 - SQL (window functions, aggregations, joins)
-- Power BI / Tableau (for visualization)
+- Performance optimization (indexes)
+- (Optional) Power BI / Tableau
 
 ---
 
-## 📁 Dataset
+## 📂 Dataset
+- `sales` — transactional data (**~1M rows**)
+- `stores` — store metadata (country, etc.)
 
-- Source: `orders_10k`
-- Size: ~10,000 rows
-- Key fields:
-  - `user_id`
-  - `order_date`
-  - `total_price`
-  - `country`
-  - `product_id`
+### Key fields:
+- `customer_id`
+- `order_date`
+- `revenue`
+- `store_id`
+- `country`
+
+---
+
+## ⚡ Performance Optimization
+To ensure scalability on a large dataset (~1M rows), indexes were added to improve query performance, window function execution, and aggregations on large datasets
 
 ---
 
 ## ⚙️ Pipeline Steps
 
 ### 1. Data Cleaning
-- Removed invalid records:
-  - NULL user_id
-  - NULL order_date
-  - non-positive revenue
-
----
+Removed invalid records:
+- `revenue <= 0`
+- `customer_id IS NULL`
+- `order_date IS NULL`
 
 ### 2. First Orders & Cohorts
-- Identified the first purchase per user
-- Assigned users to **cohorts by month**
-- Optional segmentation:
-  - by `country`
-  - by `product_id`
+- Identified each customer’s first purchase
+- Assigned `cohort_month`
+- Added geographic dimension (`country`)
 
----
-
-### 3. Lifetime Calculation
-- Calculated `month_number`:
-  - number of months since first purchase
-- Enables tracking user behavior over time (M0, M1, M2, ...)
-
----
+### 3. Customer Lifetime
+- Calculated number of months since first purchase (`month_number`)
+- Built customer lifecycle timeline
 
 ### 4. Cohort Size
-- Counted unique users per cohort
+
+Counted unique users per cohort
+
+### 5. Retention
+
+Retention Rate = Active Users / Cohort Size
+
+### 6. Revenue (LTV)
+
+Aggregated revenue per cohort over time
+
+### 7. Final Metrics
+
+ARPU = Revenue / Cohort Size
+Churn = 1 - Retention
 
 ---
 
-### 5. Retention Rate
-- Formula:
+### 8. BI-Ready Output
 
-retention = active_users / cohort_size
+Final dataset transformed into cohort matrix:
 
----
-
-### 6. Revenue
-- Aggregated revenue per cohort and month
-
----
-
-### 7. Metrics Calculation
-
-Combined all metrics into one dataset:
-
-- **Retention Rate**
-- **Revenue**
-- **LTV (Cumulative Revenue)**  
-- **ARPU**
-
-ARPU = revenue / cohort_size
-
-- **Churn**
-
-churn = 1 - retention
+| Metric     | Country | M0 | M1  | M2 | M3  |
+|------------|---------|----|-----|----|-----|
+| Retention  |         | ✔️ | ✔️ | ✔️ | ✔️ |
+| LTV        |         | ✔️ | ✔️ | ✔️ | ✔️ |
+| ARPU       |         | ✔️ | ✔️ | ✔️ | ✔️ |
+| Churn      |         | ✔️ | ✔️ | ✔️ | ✔️ |
 
 ---
 
-### 8. BI-ready Pivot
+## 📸 Example Pivot Table
 
-Final dataset contains:
-
-| Metric     | M0 | M1  | M2 | M3  |
-|------------|----|-----|----|-----|
-| Retention  | ✔️ | ✔️ | ✔️ | ✔️ |
-| LTV        | ✔️ | ✔️ | ✔️ | ✔️ |
-| ARPU       | ✔️ | ✔️ | ✔️ | ✔️ |
-| Churn      | ✔️ | ✔️ | ✔️ | ✔️ |
-
-This format is ready for:
-- Heatmaps
-- Cohort charts
-- Revenue curves
-
----
-
-## 📈 Example Insights
-
-- Retention typically drops after M1 → common behavior in e-commerce
-- Some cohorts generate higher LTV → potential high-value segments
-- ARPU trends show monetization dynamics over time
-- Churn highlights user drop-off points
-
----
-
-## 🚀 How to Run
-
-1. Open PostgreSQL / DBeaver
-2. Import dataset (`orders_10k`)
-3. Run SQL script:
-
-
-cohort_pipeline.sql
-
-
-4. Export final table to:
-- Power BI / Tableau
-- CSV for visualization
+![Cohort Pivot](images/pivot_table.png)
 
 ---
 
 ## 📊 Visualization (Power BI / Tableau)
 
-Recommended dashboards:
-
-- Retention heatmap (Cohort vs Month)
-- LTV growth curve
-- ARPU trend
+- Retention heatmap (cohort analysis)
+- LTV growth curves
+- ARPU trends over time
 - Churn dynamics
 
 ---
 
 ## 🧠 Key Skills Demonstrated
 
-- Cohort analysis
-- Product metrics (LTV, ARPU, retention, churn)
-- SQL pipeline design
-- Window functions
-- Data transformation
-- BI data preparation
+- Cohort Analysis (product analytics)
+- SQL pipelines (end-to-end data transformation)
+- Window functions (ROW_NUMBER, partitions)
+- Aggregations & joins on large datasets
+- Performance optimization (indexes)
+- Data modeling for BI tools
 
 ---
 
-## ⚡ Optimization
+## 🚀 How to Run
 
-- Used TEMP tables for modular pipeline
-- Created indexes for scalability:
-  - `(user_id, order_date)`
-- Designed pipeline to scale to larger datasets
+1. Load data into PostgreSQL:
+   - `sales_10k`
+   - `stores_10k`
+2. Run SQL script:
+   cohort_pipeline.sql
+3. Query results:
+   `SELECT * FROM metrics_temp;`
+3. Export final table to:
+   - Power BI / Tableau
+   - CSV for visualization
+
+---
+
+## 🔥 Impact & Insights (Example)
+
+- Identified retention drop after Month 1 → potential onboarding issue
+- Compared cohort performance across countries
+- Evaluated revenue contribution over customer lifetime
 
 ---
 
