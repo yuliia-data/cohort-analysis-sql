@@ -94,12 +94,12 @@ LEFT JOIN revenue_temp rev
 ORDER BY r.cohort_month, r.country, r.month_number;
 -- Pivot for BI
 SELECT
-    cohort_month,
-    country,
-    MAX(CASE WHEN month_number = 0 THEN retention_rate END) AS M0_retention,
-    MAX(CASE WHEN month_number = 1 THEN retention_rate END) AS M1_retention,
-    MAX(CASE WHEN month_number = 2 THEN retention_rate END) AS M2_retention,
-    MAX(CASE WHEN month_number = 3 THEN retention_rate END) AS M3_retention,
+    cohort_month AS cohort,
+    country AS country,
+    MAX(CASE WHEN month_number = 0 THEN retention_rate END) AS M0_ret,
+    MAX(CASE WHEN month_number = 1 THEN retention_rate END) AS M1_ret,
+    MAX(CASE WHEN month_number = 2 THEN retention_rate END) AS M2_ret,
+    MAX(CASE WHEN month_number = 3 THEN retention_rate END) AS M3_ret,
     SUM(CASE WHEN month_number = 0 THEN revenue END) AS LTV_M0,
     SUM(CASE WHEN month_number = 1 THEN revenue END) AS LTV_M1,
     SUM(CASE WHEN month_number = 2 THEN revenue END) AS LTV_M2,
@@ -108,7 +108,7 @@ SELECT
     MAX(CASE WHEN month_number = 1 THEN ARPU END) AS ARPU_M1,
     MAX(CASE WHEN month_number = 2 THEN ARPU END) AS ARPU_M2,
     MAX(CASE WHEN month_number = 3 THEN ARPU END) AS ARPU_M3,
-    MAX(CASE WHEN month_number = 0 THEN churn_rate END) AS Churn_M0,
+   -MAX(CASE WHEN month_number = 0 THEN churn_rate END) AS Churn_M0,
     MAX(CASE WHEN month_number = 1 THEN churn_rate END) AS Churn_M1,
     MAX(CASE WHEN month_number = 2 THEN churn_rate END) AS Churn_M2,
     MAX(CASE WHEN month_number = 3 THEN churn_rate END) AS Churn_M3
